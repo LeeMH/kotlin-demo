@@ -36,4 +36,16 @@ class Point(
         REWARDED,  // 리워드 부여
         USED // 사용
     }
+
+    data class Vo(
+        val userId: Long,
+        val beforeBalance: Long,
+        val balance: Long,
+        val createdAt: Timestamp,
+        val updatedAt: Timestamp
+    )
+
+    fun toVo(): Vo {
+        return Vo(userId, beforeBalance, balance, createdAt, updatedAt)
+    }
 }

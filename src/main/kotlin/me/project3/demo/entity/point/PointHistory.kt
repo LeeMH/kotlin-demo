@@ -43,4 +43,18 @@ class PointHistory(
     @Version
     @Column(name = "version", nullable = false)
     val version: Int = 0
+
+    class Vo(
+        val id: Long,
+        val userId: Long,
+        val type: Point.Type,
+        val amount: Long,
+        val beforeBalance: Long,
+        val balance: Long,
+        val createdAt: Timestamp,
+    )
+
+    fun toVo(): Vo {
+        return Vo(id!!, userId, type, amount, beforeBalance, balance, createdAt)
+    }
 }

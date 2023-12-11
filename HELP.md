@@ -58,3 +58,41 @@
             return user.toVo();
         }
 ```
+
+
+## 03/point service 생성
+
+* named parameter & default value
+
+```kotlin
+    override fun create(point: Point.Vo, amount: Long): PointHistory.Vo {
+        val history = PointHistory(
+            userId = point.userId
+        )
+
+        return repository.save(history).toVo()
+    }
+
+class PointHistory(
+    // 회원 id
+    @Column(name = "user_id", nullable = false)
+    val userId: Long,
+
+    // 포인트 거래 타입
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", columnDefinition = "varchar(16)", nullable = false)
+    val type: Point.Type = Point.Type.CREATED,
+
+    // 포인트 금액
+    @Column(name = "amount", nullable = false)
+    var amount: Long = 0,
+
+    // 변경전 포인트
+    @Column(name = "bef_bal", nullable = false)
+    var beforeBalance: Long = 0,
+
+    // 변경후 포인트
+    @Column(name = "bal", nullable = false)
+    var balance: Long = 0,
+) 
+```
