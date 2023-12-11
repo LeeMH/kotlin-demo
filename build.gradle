@@ -28,6 +28,9 @@ dependencies {
 // https://mvnrepository.com/artifact/mysql/mysql-connector-java
 	implementation 'mysql:mysql-connector-java:8.0.33'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+// https://mvnrepository.com/artifact/io.github.serpro69/kotlin-faker
+	implementation 'io.github.serpro69:kotlin-faker:1.15.0'
+
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

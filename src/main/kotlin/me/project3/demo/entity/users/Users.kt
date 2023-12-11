@@ -15,7 +15,7 @@ import javax.persistence.*
     ]
 )
 class Users(
-    @Column(name = "email", columnDefinition = "varchar(16)", nullable = false)
+    @Column(name = "email", columnDefinition = "varchar(64)", nullable = false)
     val email: String,
 
     @Column(name = "password", columnDefinition = "varchar(255)", nullable = false)
@@ -38,4 +38,18 @@ class Users(
     @Version
     @Column(name = "version", nullable = false)
     val version: Int = 0
+
+    // 서비스 외부로 노출되는 Value Object (read only)
+    class Vo(
+        val id: Long,
+        val email: String,
+        val active: Boolean,
+        val createdAt: Timestamp,
+        val updatedAt: Timestamp,
+    )
+
+    // id 값은 AI 값이기 때문에 최초 null 이지만, DB에 저장되면 자동 셋툉된다. 따라서 NotNull을 확정해 준다. !!
+    fun toVo(): Vo {
+        return Vo(id!!, email, active, createdAt, updatedAt)
+    }
 }
