@@ -144,3 +144,22 @@ curl -X POST -H "Content-type: application/json" http://localhost:8080/api/v1/us
 {"message":"","error":"비밀번호는 8자 이상 16자 이하로 입력해주세요.","success":false,"notify":false,"data":null}
 ```
 
+## 06/use-case 레이어 추가
+
+* 컨트롤러에서 @Transactional은 이상하다.
+
+* 그렇다고 user 서비스에, point, point-history 서비스를 추가하는것도 이상하고, 의존성 문제도 생길수 있다.
+
+* mvc -> controller/service/repository 이렇게 만들어야 한다고 법에 있는가?? 아니다.
+
+* 조금 더 나가보면, 대부분의 서비스는 2개 이상의 엔티티/도메인이 조합되어 이뤄진다.
+
+* 서비스는 자신의 도메인만 핸들링 한다고 일단 확정하자.
+
+* 그러면 서비스(클라이언트 입장에서, 혹은 외부로 노출시킬 인터페이스, 컨틀롤러로 제공될)를 처리할 레이어가 필요하다. 이를 use-case라 하자!!
+
+
+```bash
+curl -X POST -H "Content-type: application/json" http://localhost:8080/api/v1/user/create -d '{"email": "hello@world.com", "password": "test1234"}'
+{"message":"ok","error":"","success":true,"notify":false,"data":{"id":4,"email":"hello@world.com","active":true,"point":0}}
+```
