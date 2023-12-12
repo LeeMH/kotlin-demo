@@ -12,6 +12,10 @@ plugins {
 group = 'me.project3'
 version = '0.0.1-SNAPSHOT'
 
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin'
+
+
 java {
 	sourceCompatibility = '17'
 }
@@ -30,6 +34,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 // https://mvnrepository.com/artifact/io.github.serpro69/kotlin-faker
 	implementation 'io.github.serpro69:kotlin-faker:1.15.0'
+	implementation("com.querydsl:querydsl-jpa:5.0.0")
+	kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
 
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
