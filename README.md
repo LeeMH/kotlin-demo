@@ -187,3 +187,12 @@ class UsersService(
 curl -X POST -H "Content-type: application/json" http://localhost:8080/api/v1/user/search -d '{}'
 {"message":"ok","error":"","success":true,"notify":false,"data":{"content":[{"user":{"id":4,"email":"hello@world.com","active":true,"createdAt":1702390405000},"point":{"balance":0,"beforeBalance":0,"updatedAt":1702390405000}},{"user":{"id":3,"email":"hello#world.com","active":true,"createdAt":1702389030000},"point":{"balance":0,"beforeBalance":0,"updatedAt":1702389030000}}],"pageable":{"sort":{"sorted":false,"empty":true,"unsorted":true},"pageNumber":0,"pageSize":10,"offset":0,"paged":true,"unpaged":false},"last":true,"totalPages":1,"totalElements":2,"size":10,"number":0,"sort":{"sorted":false,"empty":true,"unsorted":true},"first":true,"numberOfElements":2,"empty":false}}
 ```
+
+
+## 08//변하는것과 변하지 않는것 분리하기
+
+## 09/멀티모듈 vs MSA
+
+## 10/docker build
+
+## 11/scouter 연결
