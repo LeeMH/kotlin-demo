@@ -1,5 +1,6 @@
 package me.project3.demo.conroller
 
+import me.project3.demo.common.inout.Paging
 import org.hibernate.validator.constraints.Length
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
@@ -22,3 +23,38 @@ data class UserCreateOut(
 
     val point: Long
 )
+
+data class UserSearchIn(
+    val email: String?, // 검색 이메일
+
+    val active: Boolean?, // 활성화 여부
+
+    val minimumPoint: Long?, // 최소 보유 포인트
+
+    val paging: Paging = Paging() // 페이징
+)
+
+// 구조회된 json 만드는 것도 아주 쉽다!!!
+data class UserSearchOut(
+    val user: User,
+
+    val point: Point
+) {
+    data class User(
+        val id: Long,
+
+        val email: String,
+
+        val active: Boolean,
+
+        val createdAt: Long,
+    )
+
+    data class Point(
+        val balance: Long,
+
+        val beforeBalance: Long,
+
+        val updatedAt: Long
+    )
+}

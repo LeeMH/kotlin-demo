@@ -163,3 +163,27 @@ curl -X POST -H "Content-type: application/json" http://localhost:8080/api/v1/us
 curl -X POST -H "Content-type: application/json" http://localhost:8080/api/v1/user/create -d '{"email": "hello@world.com", "password": "test1234"}'
 {"message":"ok","error":"","success":true,"notify":false,"data":{"id":4,"email":"hello@world.com","active":true,"point":0}}
 ```
+
+## 07/페이징 추가
+
+* queryDSL 의존성 추가 (3.x 로 넘어가면서 javax -> jakarta로 변경되면서 대환장!!)
+
+* 설정이 가장 어려움, 일단 되는 셋을 정해서 스냅샷으로 기록해 두길!
+
+* QueryDSL 사용편하도록 BaseService 추가
+
+* kotlin에서 상속(extends)와 구현(implements)은 뒤에 괄호가 있느냐 없느냐 차이다.
+
+```kotlin
+// IUsers는 implements, BaseService는 extends
+class UsersService(
+    // 난 내 서비스만 이용하기 때문에, 굳이 userRepository라 명명할 필요 없다.
+    private val repository: UsersRepository
+): IUsers, BaseService() {
+
+```
+
+```bash
+curl -X POST -H "Content-type: application/json" http://localhost:8080/api/v1/user/search -d '{}'
+{"message":"ok","error":"","success":true,"notify":false,"data":{"content":[{"user":{"id":4,"email":"hello@world.com","active":true,"createdAt":1702390405000},"point":{"balance":0,"beforeBalance":0,"updatedAt":1702390405000}},{"user":{"id":3,"email":"hello#world.com","active":true,"createdAt":1702389030000},"point":{"balance":0,"beforeBalance":0,"updatedAt":1702389030000}}],"pageable":{"sort":{"sorted":false,"empty":true,"unsorted":true},"pageNumber":0,"pageSize":10,"offset":0,"paged":true,"unpaged":false},"last":true,"totalPages":1,"totalElements":2,"size":10,"number":0,"sort":{"sorted":false,"empty":true,"unsorted":true},"first":true,"numberOfElements":2,"empty":false}}
+```
