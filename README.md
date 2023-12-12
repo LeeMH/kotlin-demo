@@ -107,3 +107,18 @@ class PointHistory(
     - 소스 = 72 라인 , 테스트코드 = 133 라인
     - 예외 메세지가 변경된다면??
 
+## 05/front interface 구현 (controller)
+
+* 유저 생성시 -> 포인트 원장 생성 > 히스토리 추가
+
+* plus, minus 이벤트 발생시 -> 포인트 가감 -> 히스토리 추가
+
+* user service -> point service -> point history service 호출??
+
+* 나중에 point에서 user 서비스가 필요하면, dependency cycle 발생!!
+
+* kotlin에서는 null이 될수 있는 것(?표시, 변수 아님..val/var 차이), null이 될수 없는것(? 없는것) 차이가 있다.
+
+* controller에서 validation 애노테셔션을 사용하기 위해서는 필수 값이더라도 nullable로 선언해 주어야 한다!!
+
+    - 왜냐하면, not null 속성인데 null값이 들어오면, 컨트롤러 진입전에 에러가 발생한다!!
