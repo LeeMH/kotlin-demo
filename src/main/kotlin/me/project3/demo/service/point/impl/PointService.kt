@@ -1,5 +1,6 @@
 package me.project3.demo.service.point.impl
 
+import me.project3.demo.common.exception.AppException
 import me.project3.demo.entity.point.Point
 import me.project3.demo.entity.point.PointRepository
 import me.project3.demo.service.point.IPoint
@@ -20,13 +21,13 @@ class PointService(
 
     override fun getByUserId(userId: Long): Point.Vo {
         return repository.findByIdOrNull(userId)?.toVo()
-            ?: throw Exception("존재하지 않는 user id 입니다. id: $userId")
+            ?: throw AppException("존재하지 않는 user id 입니다. id: $userId")
     }
 
     override fun create(userId: Long): Point.Vo {
         val duplicatedUser = findByUserId(userId)
         duplicatedUser?.run {
-            throw Exception("이미 존재하는 user id 입니다. id: $userId")
+            throw AppException("이미 존재하는 user id 입니다. id: $userId")
         }
 
         val point = Point(userId)
@@ -35,7 +36,7 @@ class PointService(
 
     override fun plus(userId: Long, amount: Long, type: Point.Type): Point.Vo {
         if (amount <= 0) {
-            throw Exception("포인트는 0보다 커야합니다. amount: $amount")
+            throw AppException("포인트는 0보다 커야합니다. amount: $amount")
         }
 
         val point = repository.getById(userId)
@@ -51,10 +52,13 @@ class PointService(
 
     override fun minus(userId: Long, amount: Long, type: Point.Type): Point.Vo {
         if (amount <= 0) {
-            throw Exception("포인트는 0보다 커야합니다. amount: $amount")
+            throw AppException("포인트는 0보다 커야합니다. amount: $amount")
         }
 
         val point = repository.getById(userId)
+        if (point.balance < amount) {
+            throw AppException("잔액이 부족합니다. balance: ${point.balance}, amount: $amount")
+        }
 
         with(point) {
             this.beforeBalance = this.balance
