@@ -4,7 +4,7 @@ import me.project3.demo.entity.point.Point
 import me.project3.demo.entity.point.PointHistory
 
 interface IPointHistory {
-    fun create(point: Point.Vo, amount: Long): PointHistory.Vo
+    fun create(point: Point.Vo): PointHistory.Vo
 
     fun plus(point: Point.Vo, amount: Long, type: Point.Type): PointHistory.Vo
 

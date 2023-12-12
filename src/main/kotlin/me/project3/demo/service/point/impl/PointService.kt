@@ -1,6 +1,6 @@
 package me.project3.demo.service.point.impl
 
-import me.project3.demo.common.exception.AppException
+import me.project3.demo.common.inout.AppException
 import me.project3.demo.entity.point.Point
 import me.project3.demo.entity.point.PointRepository
 import me.project3.demo.service.point.IPoint

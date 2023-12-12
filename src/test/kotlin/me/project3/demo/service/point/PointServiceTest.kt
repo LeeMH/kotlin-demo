@@ -1,7 +1,7 @@
 package me.project3.demo.service.point
 
 import io.github.serpro69.kfaker.Faker
-import me.project3.demo.common.exception.AppException
+import me.project3.demo.common.inout.AppException
 import me.project3.demo.entity.point.Point
 import me.project3.demo.entity.point.PointRepository
 import org.assertj.core.api.Assertions.assertThat

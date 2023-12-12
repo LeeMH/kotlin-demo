@@ -122,3 +122,25 @@ class PointHistory(
 * controller에서 validation 애노테셔션을 사용하기 위해서는 필수 값이더라도 nullable로 선언해 주어야 한다!!
 
     - 왜냐하면, not null 속성인데 null값이 들어오면, 컨트롤러 진입전에 에러가 발생한다!!
+
+* valid 애노테이션 사용시 `@field:NotNull` 이러한 형태로 사용
+
+* data class -> 롬복 사용필요 없음!!!  
+ 
+* exception hanlder 적용전
+```bash
+curl -X POST -H "Content-type: application/json" http://localhost:8080/api/v1/user/create -d '{"email": "hello#world.com", "password": "test"}'
+
+{"timestamp":"2023-12-12T13:52:53.822+00:00","status":400,"error":"Bad Request","path":"/api/v1/user/create"}
+```
+
+```bash
+2023-12-12 22:52:53.816  WARN 26113 --- [nio-8080-exec-1] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [0] in public me.project3.demo.common.inout.AppResponse<me.project3.demo.conroller.UserCreateOut> me.project3.demo.conroller.UserController.create(me.project3.demo.conroller.UserCreateIn) with 2 errors: [Field error in object 'userCreateIn' on field 'password': rejected value [test]; codes [Length.userCreateIn.password,Length.password,Length.java.lang.String,Length]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [userCreateIn.password,password]; arguments []; default message [password],16,8]; default message [비밀번호는 8자 이상 16자 이하로 입력해주세요.]] [Field error in object 'userCreateIn' on field 'email': rejected value [hello#world.com]; codes [Email.userCreateIn.email,Email.email,Email.java.lang.String,Email]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [userCreateIn.email,email]; arguments []; default message [email],[Ljavax.validation.constraints.Pattern$Flag;@635d91fc,.*]; default message [이메일 형식이 아닙니다.]] ]
+```
+
+* exception hanlder 적용후
+```bash
+curl -X POST -H "Content-type: application/json" http://localhost:8080/api/v1/user/create -d '{"email": "hello#world.com", "password": "test"}'
+{"message":"","error":"비밀번호는 8자 이상 16자 이하로 입력해주세요.","success":false,"notify":false,"data":null}
+```
+

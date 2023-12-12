@@ -12,7 +12,7 @@ import javax.transaction.Transactional
 class PointHistoryService(
     private val repository: PointHistoryRepository
 ): IPointHistory {
-    override fun create(point: Point.Vo, amount: Long): PointHistory.Vo {
+    override fun create(point: Point.Vo): PointHistory.Vo {
         val history = PointHistory(
             userId = point.userId
         )

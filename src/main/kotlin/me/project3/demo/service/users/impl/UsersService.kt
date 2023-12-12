@@ -1,6 +1,6 @@
 package me.project3.demo.service.users.impl
 
-import me.project3.demo.common.exception.AppException
+import me.project3.demo.common.inout.AppException
 import me.project3.demo.entity.users.Users
 import me.project3.demo.entity.users.UsersRepository
 import me.project3.demo.service.users.IUsers
