@@ -6,6 +6,7 @@ import me.project3.demo.entity.users.UsersRepository
 import me.project3.demo.service.BaseService
 import me.project3.demo.service.users.IUsers
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 import java.sql.Timestamp
 import java.time.Instant
@@ -14,8 +15,8 @@ import javax.transaction.Transactional
 @Component
 @Transactional
 class UsersService(
-    // 난 내 서비스만 이용하기 때문에, 굳이 userRepository라 명명할 필요 없다.
-    private val repository: UsersRepository
+    private val repository: UsersRepository,
+    private val passwordEncoder: PasswordEncoder
 ): IUsers, BaseService() {
     private fun getById(id: Long): Users {
         return repository.findByIdOrNull(id)
@@ -28,7 +29,7 @@ class UsersService(
             throw AppException("이미 존재하는 email 입니다. email: $email")
         }
 
-        var user = Users(email, password)
+        val user = Users(email, passwordEncoder.encode(password))
 
         return repository.save(user).toVo()
     }
@@ -42,7 +43,7 @@ class UsersService(
 
         // 패스워드는 절대 평문으로 저장하면 hash 함수로 저장해야 한다.!!! 일단 테스트목적
         with(user) {
-            this.password = password
+            this.password = passwordEncoder.encode(password)
             this.updatedAt = Timestamp.from(Instant.now())
         }
 

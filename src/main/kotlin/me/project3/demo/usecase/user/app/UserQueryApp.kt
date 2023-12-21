@@ -1,5 +1,6 @@
 package me.project3.demo.usecase.user.app
 
+import me.project3.demo.config.JwtTokenUtil
 import me.project3.demo.conroller.UserLoginOut
 import me.project3.demo.conroller.UserSearchOut
 import me.project3.demo.service.users.IUserQuery
@@ -8,13 +9,15 @@ import me.project3.demo.usecase.user.UserQueryUseCase
 import me.project3.demo.usecase.user.UserSearchCmd
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional(readOnly = true)
 class UserQueryApp(
-    private val userService: IUserQuery
+    private val userService: IUserQuery,
+    private val jwtTokenUtil: JwtTokenUtil
 ): UserQueryUseCase {
     override fun search(cmd: UserSearchCmd): Page<UserSearchOut> {
         val param = UserSearchParam(
@@ -59,8 +62,8 @@ class UserQueryApp(
 
         return UserLoginOut(
             user.id,
-            "token",
-            "refreshToken"
+            jwtTokenUtil.generateToken(user.id, user.email, listOf( SimpleGrantedAuthority("USER"))),
+            jwtTokenUtil.generateRefreshToken(user.id, user.email, listOf( SimpleGrantedAuthority("USER"))),
         )
 
     }
