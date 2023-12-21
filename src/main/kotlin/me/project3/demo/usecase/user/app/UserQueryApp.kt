@@ -5,6 +5,7 @@ import me.project3.demo.conroller.UserLoginOut
 import me.project3.demo.conroller.UserSearchOut
 import me.project3.demo.service.users.IUserQuery
 import me.project3.demo.service.users.impl.UserSearchParam
+import me.project3.demo.service.users.impl.UserSearchResult
 import me.project3.demo.usecase.user.UserQueryUseCase
 import me.project3.demo.usecase.user.UserSearchCmd
 import org.springframework.data.domain.Page
@@ -21,10 +22,10 @@ class UserQueryApp(
 ): UserQueryUseCase {
     override fun search(cmd: UserSearchCmd): Page<UserSearchOut> {
         val param = UserSearchParam(
-            cmd.email,
-            cmd.active,
-            cmd.minimumPoint,
-            cmd.paging
+            email = cmd.email,
+            active = cmd.active,
+            minimumPoint = cmd.minimumPoint,
+            paging = cmd.paging,
         )
 
         val total = userService.count(param)
@@ -37,19 +38,7 @@ class UserQueryApp(
         // 실제로 updatedAt등의 값을 yyyymmdd등 다른 포맷으로 변경하더라도 service layer는 이상이 없다.
         // 데이터만 서빙할뿐, 데이터 트랜스폼은 그들의 관심사가 아니다..
         val result = rows.map {
-            UserSearchOut(
-                UserSearchOut.User(
-                    id = it.user.id,
-                    email = it.user.email,
-                    active = it.user.active,
-                    createdAt = it.user.createdAt.time
-                ),
-                UserSearchOut.Point(
-                    balance = it.point.balance,
-                    beforeBalance = it.point.beforeBalance,
-                    updatedAt = it.point.updatedAt.time
-                )
-            )
+            toSearchOutputFormat(it)
         }
 
         return PageImpl(result, cmd.paging.getPageRequest(), total)
@@ -64,6 +53,36 @@ class UserQueryApp(
             user.id,
             jwtTokenUtil.generateToken(user.id, user.email, listOf( SimpleGrantedAuthority("USER"))),
             jwtTokenUtil.generateRefreshToken(user.id, user.email, listOf( SimpleGrantedAuthority("USER"))),
+        )
+
+    }
+
+    override fun getById(id: Long): UserSearchOut {
+        val param = UserSearchParam(
+            id = id
+        )
+
+        val rows = userService.search(param)
+        return when {
+            rows.isEmpty() -> throw IllegalArgumentException("존재하지 않는 user 입니다. id: $id")
+            rows.size > 1 -> throw IllegalArgumentException("중복된 user 입니다. id: $id")
+            else -> toSearchOutputFormat(rows.first())
+        }
+    }
+
+    private fun toSearchOutputFormat(row: UserSearchResult): UserSearchOut {
+        return UserSearchOut(
+            UserSearchOut.User(
+                id = row.user.id,
+                email = row.user.email,
+                active = row.user.active,
+                createdAt = row.user.createdAt.time
+            ),
+            UserSearchOut.Point(
+                balance = row.point.balance,
+                beforeBalance = row.point.beforeBalance,
+                updatedAt = row.point.updatedAt.time
+            )
         )
 
     }

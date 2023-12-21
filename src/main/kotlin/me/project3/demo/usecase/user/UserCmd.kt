@@ -15,9 +15,9 @@ data class UserCreateRes(
 )
 
 data class UserSearchCmd(
-    val email: String?,
-    val active: Boolean?,
-    val minimumPoint: Long?,
-    val paging: Paging
+    val email: String? = null,
+    val active: Boolean? = null,
+    val minimumPoint: Long? = null,
+    val paging: Paging = Paging()
 )
 

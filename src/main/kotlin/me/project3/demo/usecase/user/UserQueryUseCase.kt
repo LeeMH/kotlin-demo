@@ -8,4 +8,6 @@ interface UserQueryUseCase {
     fun search(cmd: UserSearchCmd): Page<UserSearchOut>
 
     fun login(email: String, password: String): UserLoginOut
+
+    fun getById(id: Long): UserSearchOut
 }

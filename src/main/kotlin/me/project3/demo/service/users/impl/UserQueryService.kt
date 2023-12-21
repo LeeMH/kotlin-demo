@@ -60,6 +60,7 @@ class UserQueryService(
         val where = where()
 
         // 스코프 함수 run, let, apply, also드 있는데, this등 헤깔리면 그냥 사용해도 무방
+        param.id?.run { where.and(qUsers.id.eq(param.id)) }
         param.email?.run { where.and(qUsers.email.contains(this)) }
         param.active?.run { where.and(qUsers.active.eq(param.active)) }
         param.minimumPoint?.run { where.and(qPoint.balance.goe(this)) }
