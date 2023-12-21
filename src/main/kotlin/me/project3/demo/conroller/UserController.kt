@@ -1,51 +1,49 @@
 package me.project3.demo.conroller
 
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
 import me.project3.demo.common.inout.AppResponse
 import me.project3.demo.usecase.user.UserCreateCmd
+import me.project3.demo.usecase.user.UserQueryUseCase
 import me.project3.demo.usecase.user.UserSearchCmd
 import me.project3.demo.usecase.user.UserUseCase
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
+import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.context.SecurityContext
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import javax.validation.Valid
 
+@Api(tags = ["User"])
 @RestController
 @RequestMapping("/api/v1/user")
+@PreAuthorize("hasRole('ROLE_USER')")
 class UserController(
-    private val userApp: UserUseCase
+    private val userQueryApp: UserQueryUseCase
 ) {
     companion object {
         private val log: Logger = LoggerFactory.getLogger(this::class.java)
     }
 
-    @PostMapping("/create")
-    fun create(@Valid @RequestBody dto: UserCreateIn): AppResponse<UserCreateOut> {
-        log.info("REQ :: $dto")
+    @ApiOperation(value = "User 검색")
+    @GetMapping("/{id}/get")
+    fun search(@PathVariable id: Long): AppResponse<UserSearchOut> {
+        log.info("REQ :: $id")
 
-        val cmd = UserCreateCmd(
-            dto.email!!,
-            dto.password!!,
-        )
-
-        val res = userApp.create(cmd)
-
-        // 아웃풋 포맷으로 컨트롤러 단에서 맞추기
-        val result = UserCreateOut(
-            res.user.id,
-            res.user.email,
-            res.user.active,
-            res.point.balance,
-        )
+        val result = userQueryApp.getById(id)
 
         log.info("RES :: $result")
 
         return AppResponse.ok(result)
     }
 
+    @ApiOperation(value = "User 검색")
     @PostMapping("/search")
     fun search(@Valid @RequestBody dto: UserSearchIn): AppResponse<Page<UserSearchOut>> {
         log.info("REQ :: $dto")
@@ -57,7 +55,7 @@ class UserController(
             dto.paging,
         )
 
-        val result = userApp.search(cmd)
+        val result = userQueryApp.search(cmd)
 
         log.info("RES :: $result")
 

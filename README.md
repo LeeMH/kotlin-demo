@@ -191,8 +191,10 @@ curl -X POST -H "Content-type: application/json" http://localhost:8080/api/v1/us
 
 ## 08//변하는것과 변하지 않는것 분리하기
 
-## 09/멀티모듈 vs MSA
+## 09/swagger 문서화
 
-## 10/docker build
+## 10/security 적용
+
+* role base -> 적용시 ROLE_ 접두사를 붙여야 한다.
 
 ## 11/scouter 연결
