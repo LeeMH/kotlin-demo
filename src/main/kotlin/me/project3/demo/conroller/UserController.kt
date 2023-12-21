@@ -1,5 +1,7 @@
 package me.project3.demo.conroller
 
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
 import me.project3.demo.common.inout.AppResponse
 import me.project3.demo.usecase.user.UserCreateCmd
 import me.project3.demo.usecase.user.UserQueryUseCase
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import javax.validation.Valid
 
+@Api(tags = ["User"])
 @RestController
 @RequestMapping("/api/v1/user")
 class UserController(
@@ -24,6 +27,7 @@ class UserController(
         private val log: Logger = LoggerFactory.getLogger(this::class.java)
     }
 
+    @ApiOperation(value = "User 생성")
     @PostMapping("/create")
     fun create(@Valid @RequestBody dto: UserCreateIn): AppResponse<UserCreateOut> {
         log.info("REQ :: $dto")
@@ -48,6 +52,7 @@ class UserController(
         return AppResponse.ok(result)
     }
 
+    @ApiOperation(value = "User 검색")
     @PostMapping("/search")
     fun search(@Valid @RequestBody dto: UserSearchIn): AppResponse<Page<UserSearchOut>> {
         log.info("REQ :: $dto")
