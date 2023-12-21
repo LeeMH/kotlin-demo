@@ -2,6 +2,7 @@ package me.project3.demo.conroller
 
 import me.project3.demo.common.inout.AppResponse
 import me.project3.demo.usecase.user.UserCreateCmd
+import me.project3.demo.usecase.user.UserQueryUseCase
 import me.project3.demo.usecase.user.UserSearchCmd
 import me.project3.demo.usecase.user.UserUseCase
 import org.slf4j.Logger
@@ -16,7 +17,8 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/api/v1/user")
 class UserController(
-    private val userApp: UserUseCase
+    private val userApp: UserUseCase,
+    private val userQueryApp: UserQueryUseCase
 ) {
     companion object {
         private val log: Logger = LoggerFactory.getLogger(this::class.java)
@@ -57,7 +59,7 @@ class UserController(
             dto.paging,
         )
 
-        val result = userApp.search(cmd)
+        val result = userQueryApp.search(cmd)
 
         log.info("RES :: $result")
 
