@@ -1,5 +1,6 @@
 package me.project3.demo.usecase.user.app
 
+import me.project3.demo.conroller.UserLoginOut
 import me.project3.demo.conroller.UserSearchOut
 import me.project3.demo.service.users.IUserQuery
 import me.project3.demo.service.users.impl.UserSearchParam
@@ -49,5 +50,18 @@ class UserQueryApp(
         }
 
         return PageImpl(result, cmd.paging.getPageRequest(), total)
+    }
+
+    override fun login(email: String, password: String): UserLoginOut {
+        val user = userService.getByEmail(email)
+
+        userService.matchPassword(user.id, password)
+
+        return UserLoginOut(
+            user.id,
+            "token",
+            "refreshToken"
+        )
+
     }
 }

@@ -17,3 +17,9 @@ spring:
         format_sql: true
         show_sql: true
     defer-datasource-initialization: true
+
+app:
+  jwt:
+    secret: helloworld
+    token-valid-min: 30
+    refresh-token-valid-min: 60

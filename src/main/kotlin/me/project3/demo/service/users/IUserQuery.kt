@@ -9,6 +9,8 @@ interface IUserQuery {
 
     fun getByEmail(email: String): Users.Vo
 
+    fun matchPassword(id: Long, password: String)
+
     fun count(param: UserSearchParam): Long
 
     fun search(param: UserSearchParam): List<UserSearchResult>

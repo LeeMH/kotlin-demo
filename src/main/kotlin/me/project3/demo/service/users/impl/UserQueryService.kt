@@ -7,13 +7,16 @@ import me.project3.demo.entity.users.Users
 import me.project3.demo.entity.users.UsersRepository
 import me.project3.demo.service.BaseService
 import me.project3.demo.service.users.IUserQuery
+import org.springframework.data.repository.findByIdOrNull
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
 @Transactional(readOnly = true)
 class UserQueryService(
-    private val repository: UsersRepository
+    private val repository: UsersRepository,
+    private val passwordEncoder: PasswordEncoder
 ): IUserQuery, BaseService() {
     override fun findByEmail(email: String): Users.Vo? {
         return repository.findByEmail(email)?.toVo()
@@ -22,6 +25,14 @@ class UserQueryService(
     override fun getByEmail(email: String): Users.Vo {
         return repository.findByEmail(email)?.toVo()
             ?: throw AppException("존재하지 않는 user email 입니다. email: $email")
+    }
+
+    override fun matchPassword(id: Long, password: String) {
+        val user = repository.findByIdOrNull(id)?: throw AppException("존재하지 않는 user 입니다. id: $id")
+
+        if (!passwordEncoder.matches(password, user.password)) {
+            throw AppException("비밀번호가 일치하지 않습니다.")
+        }
     }
 
     override fun count(param: UserSearchParam): Long {

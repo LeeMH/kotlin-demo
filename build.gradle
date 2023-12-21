@@ -27,6 +27,7 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
 	implementation 'org.jetbrains.kotlin:kotlin-reflect'
 // https://mvnrepository.com/artifact/mysql/mysql-connector-java
@@ -38,8 +39,8 @@ dependencies {
 	kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
 	implementation "com.querydsl:querydsl-core:5.0.0"
 
-	implementation "io.springfox:springfox-boot-starter:3.0.0"
-	implementation "io.springfox:springfox-swagger-ui:3.0.0"
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

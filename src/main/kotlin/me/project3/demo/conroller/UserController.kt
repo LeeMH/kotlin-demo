@@ -20,36 +20,10 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/api/v1/user")
 class UserController(
-    private val userApp: UserUseCase,
     private val userQueryApp: UserQueryUseCase
 ) {
     companion object {
         private val log: Logger = LoggerFactory.getLogger(this::class.java)
-    }
-
-    @ApiOperation(value = "User 생성")
-    @PostMapping("/create")
-    fun create(@Valid @RequestBody dto: UserCreateIn): AppResponse<UserCreateOut> {
-        log.info("REQ :: $dto")
-
-        val cmd = UserCreateCmd(
-            dto.email!!,
-            dto.password!!,
-        )
-
-        val res = userApp.create(cmd)
-
-        // 아웃풋 포맷으로 컨트롤러 단에서 맞추기
-        val result = UserCreateOut(
-            res.user.id,
-            res.user.email,
-            res.user.active,
-            res.point.balance,
-        )
-
-        log.info("RES :: $result")
-
-        return AppResponse.ok(result)
     }
 
     @ApiOperation(value = "User 검색")
